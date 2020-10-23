@@ -1,10 +1,6 @@
 # Eddie
 Eddie is a very simple terminal based text editor written in java that behaves a
-bit like vi. Currently the editor supports almost every feature I wanted to implement,
-but if you look at the code you'll see it needs a lot of refactoring (I apologize
-about that), and of course tests (apologies again). The text rendering algorithm
-needs some improvement as well, though is not as critical. Currently, due to time
-limitations I've stopped working on this project.
+bit like vi.
 
 ## Usage
 Eddie is built using maven, so if you want try it, first clone the repository i.e. 
