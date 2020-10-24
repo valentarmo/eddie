@@ -611,7 +611,7 @@ public class Editor
             sheet.changeCursorColumn(0);
             col = 0;
             line = text.getTextAt(row);
-        } else if (!Character.isWhitespace(line.charAt(col))) {
+        } else if (col < line.length() && !Character.isWhitespace(line.charAt(col))) {
             sheet.changeCursorRow(row);
             sheet.changeCursorColumn(col);
             return;
