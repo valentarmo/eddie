@@ -3,11 +3,9 @@ Eddie is a very simple terminal based text editor written in java that behaves a
 bit like vi.
 
 ## Usage
-Eddie is built using maven, so if you want try it, first clone the repository i.e. 
-`git clone https://github.com/valentarmo/eddie`. Then, the easiest way to use it is by
-generating a fat JAR, to do this, simply go to the project's root directory and type
-`mvn package`. You'll find the JAR under the `target` directory, to run it type
-`java -jar eddie.jar` or double click on the file.
+Eddie is built using maven, so if you want to try it, first clone the repository i.e. 
+`git clone https://github.com/valentarmo/eddie`. Then, go to the project's root directory and type
+`mvn package`. You'll find the JAR `eddie.jar` under the `target` directory. I would not recommend to run it inside a terminal.
 
 Eddie has three modes, normal, insert and visual.
 * ### Normal Mode
