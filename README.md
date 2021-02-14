@@ -5,7 +5,7 @@ bit like vi.
 ## Usage
 Eddie is built using maven, so if you want to try it, first clone the repository i.e. 
 `git clone https://github.com/valentarmo/eddie`. Then, go to the project's root directory and type
-`mvn package`. You'll find the JAR `eddie.jar` under the `target` directory. I would not recommend to run it inside a terminal.
+`mvn package`. You'll find the JAR `eddie.jar` under the `target` directory. I would not recommend to run it inside a terminal (Double click the jar so it opens in a swing terminal).
 
 Eddie has three modes, normal, insert and visual.
 * ### Normal Mode
