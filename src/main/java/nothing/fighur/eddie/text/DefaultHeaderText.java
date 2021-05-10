@@ -1,4 +1,10 @@
 package nothing.fighur.eddie.text;
 
-public class DefaultHeaderText {
+import com.googlecode.lanterna.terminal.Terminal;
+
+public class DefaultHeaderText implements HeaderText {
+    @Override
+    public void resize(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
+
+    }
 }

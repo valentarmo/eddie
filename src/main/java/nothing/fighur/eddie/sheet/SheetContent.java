@@ -6,7 +6,7 @@ import nothing.fighur.eddie.text.TextCharacter;
 
 import java.util.List;
 
-public interface SheetContent {
+public interface SheetContent extends Sheet {
     /**
      * Insert the given character at the given position
      * @param character character to insert

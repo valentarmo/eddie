@@ -1,5 +1,5 @@
 # Eddie
-Eddie is a very simple terminal based text editor written in java that behaves a
+Eddie is a very simple terminal based text oldEditor written in java that behaves a
 bit like vi.
 
 ## Usage

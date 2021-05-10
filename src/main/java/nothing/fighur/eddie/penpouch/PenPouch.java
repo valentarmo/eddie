@@ -9,5 +9,5 @@ public interface PenPouch {
      * @param keyType key type
      * @param keyStroke key stroke
      */
-    void performAction(KeyType keyType, KeyStroke keyStroke);
+    void doAction(KeyType keyType, KeyStroke keyStroke);
 }

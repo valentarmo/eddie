@@ -1,6 +1,6 @@
 package nothing.fighur.eddie;
 
-import nothing.fighur.eddie.Editor.Mode;
+import nothing.fighur.eddie.OldEditor.Mode;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.terminal.*;
@@ -26,7 +26,7 @@ public class Sheet
     private CommandBarMsgType currentCommandBarMsgType = CommandBarMsgType.Normal;
     private long lastCommandBarMsgUpdate;
     private final int commandBarMsgLifeTime = 2000;
-    private Editor editor;
+    private OldEditor oldEditor;
     private final TextColor defaultBackgroundColor = TextColor.ANSI.BLACK;
     private final TextColor defaultForegroundColor = TextColor.ANSI.WHITE;
     private int hlrow1 = -1;
@@ -38,11 +38,11 @@ public class Sheet
         Error, Normal, Warning, Success;
     }
 
-    public Sheet(Terminal terminal, Text text, Editor editor) throws IOException
+    public Sheet(Terminal terminal, Text text, OldEditor oldEditor) throws IOException
     {
         this.terminal = terminal;
         this.text = text;
-        this.editor = editor;
+        this.oldEditor = oldEditor;
         tgraphics = terminal.newTextGraphics();
         TerminalSize tmp = terminal.getTerminalSize();
         terminalrows = tmp.getRows();
@@ -242,14 +242,14 @@ public class Sheet
     {
         StringBuilder msg = new StringBuilder();
 
-        if (editor.getMode() == Mode.Insert)
+        if (oldEditor.getMode() == Mode.Insert)
             msg.append("INSERT");
-        else if (editor.getMode() == Mode.Visual)
+        else if (oldEditor.getMode() == Mode.Visual)
             msg.append("VISUAL");
         else
             msg.append("NORMAL");
 
-        msg.append(" | File: " + editor.getCurrentFileName());
+        msg.append(" | File: " + oldEditor.getCurrentFileName());
         msg.append(" | Ln " + (cy + 1));
         msg.append(", Col " + (cx + 1));
 

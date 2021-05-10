@@ -68,7 +68,7 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
-    public Position moveLeft(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
+    public Position moveRight(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
         int row = position.getRow();
         int col = position.getCol();
         if (col >= text.get(row).size())
@@ -80,7 +80,7 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
-    public Position moveRight(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
+    public Position moveLeft(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
         int row = position.getRow();
         int col = position.getCol();
         if (col <= 0)
@@ -112,7 +112,7 @@ public class DefaultContentText implements ContentText {
     public Position moveDown(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
         int row = position.getRow() + 1;
         int col = position.getCol();
-        if (row > text.size())
+        if (row >= text.size())
             return position;
         else {
             if (col > text.get(row).size()) {
@@ -162,6 +162,11 @@ public class DefaultContentText implements ContentText {
         return str;
     }
 
+    @Override
+    public void resize(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
+        drawContent(terminal, firstRow, lastRow, firstCol, lastCol);
+    }
+
     private void removeFromRow(List<TextCharacter> row, int start, int end) {
         for (int i = start; i < end; i++)
             row.remove(start);
@@ -169,14 +174,15 @@ public class DefaultContentText implements ContentText {
 
     private void drawContent(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
         try {
-            terminal.setCursorPosition(firstRow, firstCol);
-            for (int row = firstRow; row <= lastRow; row++) {
-                int textRow = row + getRowOff();
+//            terminal.clearScreen();
+            terminal.setCursorPosition(firstCol, firstRow);
+            for (int row = firstRow, relativeRow = 0; row <= lastRow; row++, relativeRow++) {
+                int textRow = relativeRow + getRowOff();
                 List<TextCharacter> rowCharacters = getCharactersAt(textRow);
                 if (!rowCharacters.isEmpty()) {
                     List<TextCharacter> visibleRowCharacters = rowCharacters.subList(getColOff(), rowCharacters.size());
-                    for (int col = 0; col < visibleRowCharacters.size() && col < lastCol; col++) {
-                        TextCharacter character = visibleRowCharacters.get(col);
+                    for (int col = firstCol, textCol = 0; textCol < visibleRowCharacters.size() && col < lastCol; col++, textCol++) {
+                        TextCharacter character = visibleRowCharacters.get(textCol);
                         terminal.setBackgroundColor(character.getBackgroundColor());
                         terminal.setForegroundColor(character.getForegroundColor());
                         terminal.putCharacter(character.getCharacter());
@@ -243,10 +249,5 @@ public class DefaultContentText implements ContentText {
 
     public void setColOff(int colOff) {
         this.colOff = colOff;
-    }
-
-    @Override
-    public void resize(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
-        drawContent(terminal, firstRow, lastRow, firstCol, lastCol);
     }
 }

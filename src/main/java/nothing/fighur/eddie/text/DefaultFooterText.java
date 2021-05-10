@@ -1,4 +1,10 @@
 package nothing.fighur.eddie.text;
 
-public class DefaultFooterText {
+import com.googlecode.lanterna.terminal.Terminal;
+
+public class DefaultFooterText implements FooterText {
+    @Override
+    public void resize(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
+
+    }
 }

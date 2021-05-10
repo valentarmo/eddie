@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.penpouch;
 
+import com.google.inject.Inject;
 import com.googlecode.lanterna.TextColor;
 import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.sheet.SheetContent;
@@ -10,7 +11,7 @@ import nothing.fighur.eddie.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuperPen implements Pencil, Highlighter {
+public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
 
     private SheetContent sheetContent;
     private SheetHeader sheetHeader;
@@ -19,6 +20,14 @@ public class SuperPen implements Pencil, Highlighter {
 
     private List<ToolObserver> toolObservers = new ArrayList<>();
     private TextColor highlighterColor = TextColor.ANSI.BLUE;
+
+    @Inject
+    public SuperPen(SheetContent sheetContent, SheetHeader sheetHeader, SheetFooter sheetFooter, Clipboard clipboard) {
+        setSheetContent(sheetContent);
+        setSheetHeader(sheetHeader);
+        setSheetFooter(sheetFooter);
+        setClipboard(clipboard);
+    }
 
     @Override
     public void insertCharacter(TextCharacter character, Position position) {
@@ -108,5 +117,15 @@ public class SuperPen implements Pencil, Highlighter {
     public void notifyToolObservers(Position position) {
         for (ToolObserver toolObserver : toolObservers)
             toolObserver.update(position);
+    }
+
+    @Override
+    public void paste(Position position) {
+
+    }
+
+    @Override
+    public void cut(Mark from, Mark to) {
+
     }
 }

@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.penpouch;
 
+import com.google.inject.Inject;
 import nothing.fighur.eddie.text.TextCharacter;
 
 public abstract class AbstractPenPouch implements PenPouch {
@@ -13,6 +14,7 @@ public abstract class AbstractPenPouch implements PenPouch {
     private Mark startingMark = Mark.unsetMark();
     private Mark closingMark = Mark.unsetMark();
 
+    @Inject
     public AbstractPenPouch(Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
         setPencil(pencil);
         setHighlighter(highlighter);

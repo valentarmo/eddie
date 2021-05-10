@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.penpouch;
 
+import com.google.inject.Inject;
 import nothing.fighur.eddie.sheet.ContentCursor;
 import nothing.fighur.eddie.text.Position;
 
@@ -7,6 +8,11 @@ public class DefaultHand implements Hand, ToolObserver {
 
     private ContentCursor contentCursor;
     private Position position = new Position(0, 0);
+
+    @Inject
+    public DefaultHand(ContentCursor contentCursor) {
+        setContentCursor(contentCursor);
+    }
 
     @Override
     public void moveLeft() {
@@ -45,7 +51,7 @@ public class DefaultHand implements Hand, ToolObserver {
 
     @Override
     public Position getPosition() {
-        return this.getPosition();
+        return this.position;
     }
 
     @Override

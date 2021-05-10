@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.penpouch;
 
+import com.google.inject.Inject;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
@@ -7,14 +8,15 @@ public class ModalPenPouch extends AbstractPenPouch {
 
     private enum Mode { Insert, Normal, Visual }
 
-    private Mode currentMode = Mode.Insert;
+    private Mode currentMode = Mode.Normal;
 
+    @Inject
     public ModalPenPouch(Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
         super(pencil, highlighter, glue, scissors, hand);
     }
 
     @Override
-    public void performAction(KeyType keyType, KeyStroke keyStroke) {
+    public void doAction(KeyType keyType, KeyStroke keyStroke) {
         Mode currentMode = getCurrentMode();
         if (currentMode == Mode.Normal)
             handleInNormalMode(keyType, keyStroke);
@@ -74,11 +76,14 @@ public class ModalPenPouch extends AbstractPenPouch {
                 break;
             case 'x':
                 deleteCharacter();
+                break;
             case 'i':
                 setCurrentMode(Mode.Insert);
+                break;
             case 'v':
                 setCurrentMode(Mode.Visual);
                 setStartingMark();
+                break;
             case ':':
                 // TODO commands
                 break;

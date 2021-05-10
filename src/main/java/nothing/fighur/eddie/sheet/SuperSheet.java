@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.sheet;
 
+import com.google.inject.Inject;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalResizeListener;
@@ -9,12 +10,13 @@ import nothing.fighur.eddie.text.*;
 import java.io.IOException;
 import java.util.List;
 
-public class SuperSheet implements SheetContent, TerminalResizeListener, ContentCursor {
+public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, TerminalResizeListener, ContentCursor {
 
     private ContentText contentText;
     private HeaderText headerText;
     private FooterText footerText;
     private Terminal terminal;
+    private Position lastPosition = new Position(0, 0);
     private int sheetRows;
     private int sheetCols;
     private int contentFirstRow;
@@ -32,6 +34,7 @@ public class SuperSheet implements SheetContent, TerminalResizeListener, Content
 
     private SuperSheet() { }
 
+    @Inject
     public SuperSheet(ContentText contentText, HeaderText headerText, FooterText footerText, Terminal terminal) throws IOException {
         setContentText(contentText);
         setHeaderText(headerText);
@@ -44,70 +47,80 @@ public class SuperSheet implements SheetContent, TerminalResizeListener, Content
     @Override
     public Position insertCharacter(TextCharacter character, Position position) {
         Position newPosition = getContentText().insertCharacter(character, position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position deleteCharacter(Position position) {
         Position newPosition = getContentText().deleteCharacter(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position insertNewLine(Position position) {
         Position newPosition = getContentText().insertNewLine(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveLeft(Position position) {
         Position newPosition = getContentText().moveLeft(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveRight(Position position) {
         Position newPosition = getContentText().moveRight(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveUp(Position position) {
         Position newPosition = getContentText().moveUp(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveDown(Position position) {
         Position newPosition = getContentText().moveDown(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveToStartOfNextWord(Position position) {
         Position newPosition = getContentText().moveToStartOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveToEndOfNextWord(Position position) {
         Position newPosition = getContentText().moveToEndOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
     @Override
     public Position moveToStartOfPreviousWord(Position position) {
         Position newPosition = getContentText().moveToStartOfPreviousWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setCursorPosition(newPosition);
+        setLastPosition(newPosition);
+        setTerminalCursorPosition(newPosition);
         return newPosition;
     }
 
@@ -128,11 +141,19 @@ public class SuperSheet implements SheetContent, TerminalResizeListener, Content
 
     @Override
     public void onResized(Terminal terminal, TerminalSize terminalSize) {
-        setSheetRows(terminalSize.getRows());
-        setSheetCols(terminalSize.getColumns());
+        if (terminal == getTerminal()) {
+            setSheetRows(terminalSize.getRows());
+            setSheetCols(terminalSize.getColumns());
+            refresh();
+        }
+    }
+
+    @Override
+    public void refresh() {
         getHeaderText().resize(terminal, getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
         getContentText().resize(terminal, getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
         getFooterText().resize(terminal, getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
+        setTerminalCursorPosition(getLastPosition());
     }
 
     private void drawHeader() {
@@ -145,10 +166,13 @@ public class SuperSheet implements SheetContent, TerminalResizeListener, Content
         // TODO
     }
 
-    private void setCursorPosition(Position position)
+    private void setTerminalCursorPosition(Position position)
     {
         try {
-            getTerminal().setCursorPosition(position.getRow(), position.getCol());
+            int row = position.getRow() - getContentFirstRow();
+            int col = position.getCol() - getContentFirstCol();
+            getTerminal().setCursorPosition(col, row);
+            getTerminal().flush();
         } catch (IOException e) {
             // TODO
         }
@@ -308,5 +332,13 @@ public class SuperSheet implements SheetContent, TerminalResizeListener, Content
 
     public void setFooterLastCol(int footerLastCol) {
         this.footerLastCol = footerLastCol;
+    }
+
+    public Position getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(Position lastPosition) {
+        this.lastPosition = lastPosition;
     }
 }
