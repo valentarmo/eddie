@@ -3,6 +3,7 @@ package nothing.fighur.eddie.penpouch;
 import com.google.inject.Inject;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import nothing.fighur.eddie.EditorVariables;
 
 public class ModalPenPouch extends AbstractPenPouch {
 
@@ -113,7 +114,11 @@ public class ModalPenPouch extends AbstractPenPouch {
                 deleteCharacter();
                 break;
             case Tab:
-                insertCharacter('\t');
+                int col = getHand().getPosition().getCol();
+                do {
+                    col = getHand().getPosition().getCol();
+                    insertCharacter(' ');
+                } while (col % EditorVariables.getTabStop() != 0);
                 break;
             case Escape:
                 setCurrentMode(Mode.Normal);

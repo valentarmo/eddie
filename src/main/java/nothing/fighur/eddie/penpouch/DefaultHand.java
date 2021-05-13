@@ -50,6 +50,11 @@ public class DefaultHand implements Hand, ToolObserver {
     }
 
     @Override
+    public void reset() {
+        this.position = new Position(0, 0);
+    }
+
+    @Override
     public Position getPosition() {
         return this.position;
     }

@@ -41,6 +41,11 @@ public interface Hand extends ToolObserver {
     void moveToStartOfPreviousWord();
 
     /**
+     * Reset the hand to its initial position
+     */
+    void reset();
+
+    /**
      * Get the hand's current position.
      */
     Position getPosition();

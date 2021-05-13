@@ -2,12 +2,16 @@ package nothing.fighur.eddie;
 
 import com.googlecode.lanterna.TextColor;
 
+/**
+ * Global configuration variables
+ */
 public class EditorVariables {
 
     private static final TextColor DEFAULT_BACKGROUND_COLOR = TextColor.ANSI.BLACK;
     private static final TextColor DEFAULT_FOREGROUND_COLOR = TextColor.ANSI.WHITE;
     private static TextColor backgroundColor = DEFAULT_BACKGROUND_COLOR;
-    private static TextColor FOREGROUND_COLOR = DEFAULT_FOREGROUND_COLOR;
+    private static TextColor foregroundColor = DEFAULT_FOREGROUND_COLOR;
+    private static int tabStop = 4;
 
     public static TextColor getDefaultBackgroundColor() {
         return DEFAULT_BACKGROUND_COLOR;
@@ -26,10 +30,18 @@ public class EditorVariables {
     }
 
     public static TextColor getForegroundColor() {
-        return FOREGROUND_COLOR;
+        return foregroundColor;
     }
 
     public static void setForegroundColor(TextColor foregroundColor) {
-        FOREGROUND_COLOR = foregroundColor;
+        EditorVariables.foregroundColor = foregroundColor;
+    }
+
+    public static int getTabStop() {
+        return tabStop;
+    }
+
+    public static void setTabStop(int tabStop) {
+        EditorVariables.tabStop = tabStop;
     }
 }

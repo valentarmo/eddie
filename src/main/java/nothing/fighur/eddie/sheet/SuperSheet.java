@@ -46,82 +46,132 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
 
     @Override
     public Position insertCharacter(TextCharacter character, Position position) {
-        Position newPosition = getContentText().insertCharacter(character, position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().insertCharacter(character, position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position deleteCharacter(Position position) {
-        Position newPosition = getContentText().deleteCharacter(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().deleteCharacter(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position insertNewLine(Position position) {
-        Position newPosition = getContentText().insertNewLine(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().insertNewLine(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveLeft(Position position) {
-        Position newPosition = getContentText().moveLeft(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveLeft(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveRight(Position position) {
-        Position newPosition = getContentText().moveRight(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveRight(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveUp(Position position) {
-        Position newPosition = getContentText().moveUp(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveUp(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveDown(Position position) {
-        Position newPosition = getContentText().moveDown(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveDown(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveToStartOfNextWord(Position position) {
-        Position newPosition = getContentText().moveToStartOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveToStartOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveToEndOfNextWord(Position position) {
-        Position newPosition = getContentText().moveToEndOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveToEndOfNextWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
     public Position moveToStartOfPreviousWord(Position position) {
-        Position newPosition = getContentText().moveToStartOfPreviousWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        setLastPosition(newPosition);
-        setTerminalCursorPosition(newPosition);
-        return newPosition;
+        try {
+            Position newPosition = getContentText().moveToStartOfPreviousWord(position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(newPosition);
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return position;
+        }
     }
 
     @Override
@@ -131,7 +181,11 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
 
     @Override
     public void deleteCharactersBetween(Mark from, Mark to) {
-        getContentText().deleteCharactersBetween(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+        try {
+            getContentText().deleteCharactersBetween(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+        } catch (IOException e) {
+            // TODO
+        }
     }
 
     @Override
@@ -150,27 +204,51 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
 
     @Override
     public void refresh() {
-        getHeaderText().resize(terminal, getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
-        getContentText().resize(terminal, getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-        getFooterText().resize(terminal, getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
-        setTerminalCursorPosition(getLastPosition());
+        try {
+            getHeaderText().resize(terminal, getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
+            getContentText().resize(terminal, getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            getFooterText().resize(terminal, getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
     }
 
-    private void drawHeader() {
-        Terminal terminal = getTerminal();
-        // TODO
+    @Override
+    public void updateTitle(String title) {
+        try {
+            getHeaderText().updateTitle(getTerminal(), title);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
     }
 
-    private void drawFooter() {
-        Terminal terminal = getTerminal();
-        // TODO
+    @Override
+    public void updateSubtitle(String subtitle) {
+        try {
+            getHeaderText().updateSubtitle(getTerminal(), subtitle);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
+    public void updateLogo(String logo) {
+        try {
+            getHeaderText().updateLogo(getTerminal(), logo);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
     }
 
     private void setTerminalCursorPosition(Position position)
     {
         try {
-            int row = position.getRow() - getContentFirstRow();
-            int col = position.getCol() - getContentFirstCol();
+            int row = position.getRow() + getContentFirstRow() - getContentText().getRowOffset();
+            int col = position.getCol() + getContentFirstCol() - getContentText().getColOffset();
             getTerminal().setCursorPosition(col, row);
             getTerminal().flush();
         } catch (IOException e) {
@@ -219,9 +297,9 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         setHeaderFirstRow(0);
         setHeaderLastRow(0);
         setContentFirstRow(1);
-        setContentLastRow(sheetRows - 1);
+        setContentLastRow(sheetRows - 2);
         setFooterFirstRow(sheetRows);
-        setFooterLastRow(sheetRows);
+        setFooterLastRow(sheetRows - 1);
     }
 
     public int getSheetCols() {
