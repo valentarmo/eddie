@@ -1,6 +1,7 @@
 package nothing.fighur.eddie.penpouch;
 
 import com.google.inject.Inject;
+import nothing.fighur.eddie.Editor;
 import nothing.fighur.eddie.text.TextCharacter;
 
 public abstract class AbstractPenPouch implements PenPouch {
@@ -10,12 +11,14 @@ public abstract class AbstractPenPouch implements PenPouch {
     private Glue glue;
     private Scissors scissors;
     private Hand hand;
+    private Editor editor;
 
     private Mark startingMark = Mark.unsetMark();
     private Mark closingMark = Mark.unsetMark();
 
     @Inject
-    public AbstractPenPouch(Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
+    public AbstractPenPouch(Editor editor, Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
+        setEditor(editor);
         setPencil(pencil);
         setHighlighter(highlighter);
         setGlue(glue);
@@ -99,6 +102,18 @@ public abstract class AbstractPenPouch implements PenPouch {
         getScissors().cut(getStartingMark(), getClosingMark());
     }
 
+    protected void saveSheet() {
+        getEditor().saveSheet();
+    }
+
+    protected void saveSheetAs(String key) {
+        getEditor().saveSheetAs(key);
+    }
+
+    protected void changeSheet(String key) {
+        getEditor().edit(key);
+    }
+
     public Pencil getPencil() {
         return pencil;
     }
@@ -145,5 +160,13 @@ public abstract class AbstractPenPouch implements PenPouch {
 
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+
+    public Editor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(Editor editor) {
+        this.editor = editor;
     }
 }

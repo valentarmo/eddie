@@ -5,6 +5,7 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalResizeListener;
+import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.penpouch.Mark;
 import nothing.fighur.eddie.text.*;
 
@@ -43,6 +44,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         setTerminal(terminal);
         setSheetRows(terminal.getTerminalSize().getRows());
         setSheetCols(terminal.getTerminalSize().getColumns());
+        refresh();
     }
 
     @Override
@@ -192,9 +194,22 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     }
 
     @Override
-    public void deleteCharactersBetween(Mark from, Mark to) {
+    public Position deleteCharactersBetween(Mark from, Mark to) {
         try {
-            getContentText().deleteCharactersBetween(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            Position newPosition = getContentText().deleteCharactersBetween(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(newPosition);
+            setTerminalCursorPosition(getLastPosition());
+            return newPosition;
+        } catch (IOException e) {
+            // TODO
+            return getLastPosition();
+        }
+    }
+
+    @Override
+    public void writeText(List<TextCharacter> text) {
+        try {
+            getContentText().writeText(text, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
             // TODO
@@ -240,12 +255,11 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         }
     }
 
-    @Override
-    public void refresh() {
+    private void refresh() {
         try {
-            getHeaderText().resize(terminal, getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
-            getContentText().resize(terminal, getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
-            getFooterText().resize(terminal, getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
+            getHeaderText().resize(getTerminal(), getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
+            getContentText().resize(getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            getFooterText().resize(getTerminal(), getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
             // TODO
@@ -282,9 +296,53 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         }
     }
 
+    @Override
+    public void putWarning(String warning) {
+        try {
+            getFooterText().putWarning(getTerminal(), warning);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
+    public void putError(String error) {
+        try {
+            getFooterText().putError(getTerminal(), error);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
+    public void putMessage(String message) {
+        try {
+            getFooterText().putMessage(getTerminal(), message);
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
+    public String promptForInput(String promptMessage) {
+        try {
+            String input = getFooterText().promptForInput(getTerminal(), promptMessage);
+            setTerminalCursorPosition(getLastPosition());
+            return input;
+        } catch (IOException e) {
+            // TODO
+            return "";
+        }
+    }
+
     private void setTerminalCursorPosition(Position position)
     {
         try {
+            getTerminal().setBackgroundColor(EditorVariables.getBackgroundColor());
+            getTerminal().setForegroundColor(EditorVariables.getForegroundColor());
             int row = position.getRow() + getContentFirstRow() - getContentText().getRowOffset();
             int col = position.getCol() + getContentFirstCol() - getContentText().getColOffset();
             getTerminal().setCursorPosition(col, row);
@@ -336,8 +394,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         setHeaderLastRow(0);
         setContentFirstRow(1);
         setContentLastRow(sheetRows - 2);
-        setFooterFirstRow(sheetRows);
-        setFooterLastRow(sheetRows - 1);
+        setFooterFirstRow(sheetRows - 1);
+        setFooterLastRow(sheetRows);
     }
 
     public int getSheetCols() {

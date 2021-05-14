@@ -1,6 +1,6 @@
 package nothing.fighur.eddie.sheet;
 
-public interface SheetHeader extends Sheet {
+public interface SheetHeader {
     /**
      * Update the header's title. The title is drawn at the header's middle position
      * @param title the title. Will put whatever fits in the assigned section.

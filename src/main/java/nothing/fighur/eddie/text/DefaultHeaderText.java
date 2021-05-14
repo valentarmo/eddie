@@ -70,14 +70,14 @@ public class DefaultHeaderText implements HeaderText {
     }
 
     private void drawText(Terminal terminal, int firstCol, int lastCol, String text) throws IOException {
-        terminal.setForegroundColor(getDefaultFooterForegroundColor());
         terminal.setBackgroundColor(getDefaultFooterBackgroundColor());
+        terminal.setForegroundColor(getDefaultFooterForegroundColor());
         int textIndex = 0;
         for (int i = getFirstRow(); i <= getLastRow(); i++) {
             terminal.setCursorPosition(firstCol, i);
             for (int j = firstCol; j < lastCol; j++) {
                 char c = textIndex < text.length() ? text.charAt(textIndex++) : ' ';
-                if (c == '\n' || c == '\r') {
+                if (c == '\n') {
                     for (int k = j; k < lastCol; k++)
                         terminal.putCharacter(' ');
                     break;

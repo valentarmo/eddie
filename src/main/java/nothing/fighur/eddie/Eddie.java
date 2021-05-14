@@ -32,8 +32,18 @@ public class Eddie implements Editor {
     }
 
     @Override
-    public void edit(String file) {
-        // TODO
+    public void edit(String key) {
+        getFolder().takeOutSheet(key);
+    }
+
+    @Override
+    public void saveSheet() {
+        getFolder().saveSheet();
+    }
+
+    @Override
+    public void saveSheetAs(String key) {
+        getFolder().saveSheetAs(key);
     }
 
     public PenPouch getPenPouch() {

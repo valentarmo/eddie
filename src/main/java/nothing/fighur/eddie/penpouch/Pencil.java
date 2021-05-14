@@ -22,4 +22,47 @@ public interface Pencil extends Tool {
      * @param position where to insert a new line
      */
     void insertNewLine(Position position);
+
+    /**
+     * Write a title
+     * @param title the title
+     */
+    void writeTitle(String title);
+
+    /**
+     * Write a subtitle
+     * @param subtitle the subtitle
+     */
+    void writeSubtitle(String subtitle);
+
+    /**
+     * Write a logo
+     * @param logo the logo
+     */
+    void writeLogo(String logo);
+
+    /**
+     * Write a warning
+     * @param warning the warning
+     */
+    void writeWarning(String warning);
+
+    /**
+     * Write an error
+     * @param error the error
+     */
+    void writeError(String error);
+
+    /**
+     * Write a message
+     * @param message the message
+     */
+    void writeMessage(String message);
+
+    /**
+     * Prompt for input
+     * @param prompt prompt message
+     * @return the input
+     */
+    String promptForInput(String prompt);
 }

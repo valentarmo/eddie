@@ -7,8 +7,19 @@ public interface Editor {
     void edit();
 
     /**
-     * Edit file
-     * @param file the file's path
+     * Edit the contents of the artifact identified by key
+     * @param key the artifact's identifier
      */
-    void edit(String file);
+    void edit(String key);
+
+    /**
+     * Save the editor's content
+     */
+    void saveSheet();
+
+    /**
+     * Save the editor's content to the specified at key
+     * @param key
+     */
+    void saveSheetAs(String key);
 }

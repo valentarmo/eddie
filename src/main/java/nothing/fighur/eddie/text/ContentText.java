@@ -9,6 +9,19 @@ import java.util.List;
 
 public interface ContentText extends VisibleText {
     /**
+     * Insert the given list as text.
+     * If there is text it replaces it.
+     * @param text list with text characters
+     * @param terminal terminal where to draw
+     * @param firstRow starting row of the content zone within the provided terminal
+     * @param lastRow final row of the content zone within the provided terminal
+     * @param firstCol starting column of the content zone within the provided terminal
+     * @param lastCol final column of the content zone within the provided terminal
+     * @throws IOException If there was an underlying I/O error
+     */
+    void writeText(List<TextCharacter> text, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
+
+    /**
      * Insert the given list as text
      * @param position position where to insert
      * @param text list of TextCharacter
@@ -166,8 +179,9 @@ public interface ContentText extends VisibleText {
      * @param firstCol starting column of the content zone within the provided terminal
      * @param lastCol final column of the content zone within the provided terminal
      * @throws IOException If there was an underlying I/O error
+     * @return position in the text after the operation completes.
      */
-    void deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
+    Position deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
 
     /**
      * Get the text characters between the given marks

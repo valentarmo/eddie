@@ -4,7 +4,6 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.penpouch.Mark;
-import nothing.fighur.eddie.sheet.SheetContent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Objects;
 public class DefaultContentText implements ContentText {
 
     private List<List<TextCharacter>> text = new ArrayList<>();
-    private SheetContent sheetContent;
     private TextColor highlightColor = TextColor.ANSI.YELLOW;
     private Mark fromHighlightMark = Mark.unsetMark();
     private Mark toHighlightMark = Mark.unsetMark();
@@ -24,6 +22,12 @@ public class DefaultContentText implements ContentText {
 
     public DefaultContentText() {
         text.add(new ArrayList<>());
+    }
+
+    @Override
+    public void writeText(List<TextCharacter> text, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
+        this.text = new ArrayList<>();
+        insertText(new Position(0, 0), text, terminal, firstRow, lastRow, firstCol, lastCol);
     }
 
     @Override
@@ -52,6 +56,8 @@ public class DefaultContentText implements ContentText {
     public Position insertCharacter(TextCharacter character, Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
         int row = position.getRow();
         int col = position.getCol();
+        if (row == text.size())
+            text.add(new ArrayList<>());
         text.get(row).add(col, character);
         Position newPosition = new Position(row, col + 1);
         drawContent(newPosition, terminal, firstRow, lastRow, firstCol, lastCol);
@@ -178,7 +184,7 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
-    public void deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
+    public Position deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
         Mark head;
         Mark tail;
         if (from.compareTo(to) > 0) {
@@ -207,6 +213,7 @@ public class DefaultContentText implements ContentText {
         }
         removeFromRow(text.get(tailingRow), tailingCol, headingCol);
         drawContent(null, terminal, firstRow, lastRow, firstCol, lastCol);
+        return new Position(tailingRow, tailingCol);
     }
 
     @Override
@@ -288,8 +295,9 @@ public class DefaultContentText implements ContentText {
     }
 
     private void removeFromRow(List<TextCharacter> row, int start, int end) {
-        for (int i = start; i < end; i++)
-            row.remove(start);
+        if (end > start) {
+            row.subList(start, end).clear();
+        }
     }
 
     private void drawContent(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
@@ -363,18 +371,7 @@ public class DefaultContentText implements ContentText {
         int headingCol = head.getColumn();
         if (!(row >= tailingRow && row <= headingRow))
             return false;
-        else if ((row == tailingRow && col < tailingCol) || (row == headingRow && col >= headingCol))
-            return false;
-        else
-            return true;
-    }
-
-    public SheetContent getSheetContent() {
-        return sheetContent;
-    }
-
-    public void setSheetContent(SheetContent sheetContent) {
-        this.sheetContent = sheetContent;
+        else return (row != tailingRow || col >= tailingCol) && (row != headingRow || col < headingCol);
     }
 
     public void setRowOffset(int rowOffset) {

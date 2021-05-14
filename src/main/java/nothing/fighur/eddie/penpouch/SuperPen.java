@@ -2,7 +2,6 @@ package nothing.fighur.eddie.penpouch;
 
 import com.google.inject.Inject;
 import com.googlecode.lanterna.TextColor;
-import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.sheet.SheetContent;
 import nothing.fighur.eddie.sheet.SheetFooter;
 import nothing.fighur.eddie.sheet.SheetHeader;
@@ -42,6 +41,41 @@ public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
     @Override
     public void insertNewLine(Position position) {
         notifyToolObservers(getSheetContent().insertNewLine(position));
+    }
+
+    @Override
+    public void writeTitle(String title) {
+        getSheetHeader().updateTitle(title);
+    }
+
+    @Override
+    public void writeSubtitle(String subtitle) {
+        getSheetHeader().updateSubtitle(subtitle);
+    }
+
+    @Override
+    public void writeLogo(String logo) {
+        getSheetHeader().updateLogo(logo);
+    }
+
+    @Override
+    public void writeWarning(String warning) {
+        getSheetFooter().putWarning(warning);
+    }
+
+    @Override
+    public void writeError(String error) {
+        getSheetFooter().putError(error);
+    }
+
+    @Override
+    public void writeMessage(String message) {
+        getSheetFooter().putMessage(message);
+    }
+
+    @Override
+    public String promptForInput(String prompt) {
+        return getSheetFooter().promptForInput(prompt);
     }
 
     public SheetContent getSheetContent() {
@@ -122,6 +156,6 @@ public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
     @Override
     public void cut(Mark from, Mark to) {
         getClipboard().store(getSheetContent().getCharactersBetween(from, to));
-        getSheetContent().deleteCharactersBetween(from, to);
+        notifyToolObservers(getSheetContent().deleteCharactersBetween(from, to));
     }
 }

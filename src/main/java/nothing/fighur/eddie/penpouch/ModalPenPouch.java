@@ -3,6 +3,7 @@ package nothing.fighur.eddie.penpouch;
 import com.google.inject.Inject;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import nothing.fighur.eddie.Editor;
 import nothing.fighur.eddie.EditorVariables;
 
 public class ModalPenPouch extends AbstractPenPouch {
@@ -12,8 +13,8 @@ public class ModalPenPouch extends AbstractPenPouch {
     private Mode currentMode = Mode.Normal;
 
     @Inject
-    public ModalPenPouch(Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
-        super(pencil, highlighter, glue, scissors, hand);
+    public ModalPenPouch(Editor editor, Pencil pencil, Highlighter highlighter, Glue glue, Scissors scissors, Hand hand) {
+        super(editor, pencil, highlighter, glue, scissors, hand);
     }
 
     @Override

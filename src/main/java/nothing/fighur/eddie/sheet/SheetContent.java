@@ -51,14 +51,9 @@ public interface SheetContent extends Sheet {
      * Delete characters between the given marks
      * @param from starting mark
      * @param to closing mark
+     * @return position in the text after the operation completes
      */
-    void deleteCharactersBetween(Mark from, Mark to);
-
-    /**
-     * Get all text as a CharSequence
-     * @return CharSequence
-     */
-    CharSequence asCharSequence();
+    Position deleteCharactersBetween(Mark from, Mark to);
 
     /**
      * Set the text's background color for highlighting
