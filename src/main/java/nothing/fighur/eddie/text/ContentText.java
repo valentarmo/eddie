@@ -9,6 +9,19 @@ import java.util.List;
 
 public interface ContentText extends VisibleText {
     /**
+     * Insert the given list as text
+     * @param position position where to insert
+     * @param text list of TextCharacter
+     * @param terminal terminal where to draw
+     * @param firstRow starting row of the content zone within the provided terminal
+     * @param lastRow final row of the content zone within the provided terminal
+     * @param firstCol starting column of the content zone within the provided terminal
+     * @param lastCol final column of the content zone within the provided terminal
+     * @throws IOException If there was an underlying I/O error
+     */
+    void insertText(Position position, List<TextCharacter> text, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
+
+    /**
      * Insert the given character at the given position
      * @param character character to insert
      * @param position starting position

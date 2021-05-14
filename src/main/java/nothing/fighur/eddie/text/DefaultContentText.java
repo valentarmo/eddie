@@ -27,6 +27,28 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
+    public void insertText(Position position, List<TextCharacter> text, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
+        int row = position.getRow();
+        int col = position.getCol();
+        for (TextCharacter character : text) {
+            if (character.getCharacter() == '\n') {
+                if (col == this.text.get(row).size()) {
+                    this.text.add(++row, new ArrayList<>());
+                } else {
+                    List<TextCharacter> entireRow = this.text.get(row);
+                    List<TextCharacter> textToTheRight = new ArrayList<>(entireRow.subList(col, entireRow.size()));
+                    this.text.add(++row, textToTheRight);
+                    removeFromRow(entireRow, col, entireRow.size());
+                }
+                col = 0;
+            } else {
+                this.text.get(row).add(col++, character);
+            }
+        }
+        drawContent(position, terminal, firstRow, lastRow, firstCol, lastCol);
+    }
+
+    @Override
     public Position insertCharacter(TextCharacter character, Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
         int row = position.getRow();
         int col = position.getCol();
@@ -175,7 +197,12 @@ public class DefaultContentText implements ContentText {
                 List<TextCharacter> rowCharacters = text.get(tailingRow);
                 removeFromRow(rowCharacters, tailingCol, rowCharacters.size());
                 tailingCol = 0;
-                tailingRow++;
+                if (rowCharacters.isEmpty()) {
+                    text.remove(tailingRow);
+                    headingRow--;
+                } else {
+                    tailingRow++;
+                }
             }
         }
         removeFromRow(text.get(tailingRow), tailingCol, headingCol);
@@ -272,7 +299,7 @@ public class DefaultContentText implements ContentText {
             terminal.setCursorPosition(firstCol, row);
             int textRow = relativeRow + getRowOffset();
             List<TextCharacter> rowCharacters = getCharactersAt(textRow);
-            if (relativeRow < text.size()) {
+            if (textRow < text.size()) {
                 List<TextCharacter> visibleRowCharacters = getColOffset() <= rowCharacters.size() ? rowCharacters.subList(getColOffset(), rowCharacters.size()) : new ArrayList<>();
                 for (int col = firstCol, textCol = 0; textCol < visibleRowCharacters.size() && col < lastCol; col++, textCol++) {
                     TextCharacter character = visibleRowCharacters.get(textCol);
@@ -336,7 +363,7 @@ public class DefaultContentText implements ContentText {
         int headingCol = head.getColumn();
         if (!(row >= tailingRow && row <= headingRow))
             return false;
-        else if ((row == tailingRow && col < tailingCol) || (row == headingRow && col > headingCol))
+        else if ((row == tailingRow && col < tailingCol) || (row == headingRow && col >= headingCol))
             return false;
         else
             return true;

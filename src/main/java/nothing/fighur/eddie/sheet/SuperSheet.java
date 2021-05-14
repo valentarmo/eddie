@@ -46,6 +46,17 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     }
 
     @Override
+    public void insertText(Position position, List<TextCharacter> text) {
+        try {
+            getContentText().insertText(position, text, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setLastPosition(position);
+            setTerminalCursorPosition(position);
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
     public Position insertCharacter(TextCharacter character, Position position) {
         try {
             Position newPosition = getContentText().insertCharacter(character, position, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());

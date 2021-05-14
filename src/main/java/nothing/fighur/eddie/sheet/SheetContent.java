@@ -9,6 +9,13 @@ import java.util.List;
 
 public interface SheetContent extends Sheet {
     /**
+     * Insert the given list as text
+     * @param position position where to insert
+     * @param text list of TextCharacter
+     */
+    void insertText(Position position, List<TextCharacter> text);
+
+    /**
      * Insert the given character at the given position
      * @param character character to insert
      * @param position starting position

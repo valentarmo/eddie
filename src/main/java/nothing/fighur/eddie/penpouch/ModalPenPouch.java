@@ -203,9 +203,10 @@ public class ModalPenPouch extends AbstractPenPouch {
                 setClosingMark();
                 highlight();
                 break;
-            case 'd':
-                cleanHighlight();
+            case 'x':
                 cut();
+                cleanHighlight();
+                setCurrentMode(Mode.Normal);
                 break;
             default:
                 break;

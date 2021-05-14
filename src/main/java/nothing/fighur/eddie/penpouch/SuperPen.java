@@ -116,11 +116,12 @@ public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
 
     @Override
     public void paste(Position position) {
-
+        getSheetContent().insertText(position, getClipboard().retrieve());
     }
 
     @Override
     public void cut(Mark from, Mark to) {
-
+        getClipboard().store(getSheetContent().getCharactersBetween(from, to));
+        getSheetContent().deleteCharactersBetween(from, to);
     }
 }
