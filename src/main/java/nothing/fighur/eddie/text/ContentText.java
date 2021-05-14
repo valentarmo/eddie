@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.text;
 
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import nothing.fighur.eddie.penpouch.Mark;
 
@@ -180,4 +181,33 @@ public interface ContentText extends VisibleText {
      * @return int - the row offset
      */
     int getRowOffset();
+
+    /**
+     * Set the text's background color for highlighting
+     * @param color the color
+     */
+    void setHighlightColor(TextColor color);
+
+    /**
+     * Mark where the text is highlighted.
+     * @param from initial Mark
+     * @param to finishing Mark
+     * @param terminal terminal where to draw
+     * @param firstRow starting row of the content zone within the provided terminal
+     * @param lastRow final row of the content zone within the provided terminal
+     * @param firstCol starting column of the content zone within the provided terminal
+     * @param lastCol final column of the content zone within the provided terminal
+     */
+    void setHighlightMarks(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
+
+    /**
+     * Clean highlight
+     * @param terminal terminal where to draw
+     * @param firstRow starting row of the content zone within the provided terminal
+     * @param lastRow final row of the content zone within the provided terminal
+     * @param firstCol starting column of the content zone within the provided terminal
+     * @param lastCol final column of the content zone within the provided terminal
+     * @throws IOException If there was an underlying I/O error
+     */
+    void cleanHighlight(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException;
 }

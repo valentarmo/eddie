@@ -78,18 +78,13 @@ public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
 
     @Override
     public void highlight(Mark from, Mark to) {
-        List<TextCharacter> characters = getSheetContent().getCharactersBetween(from, to);
-        for (TextCharacter character : characters) {
-            character.setBackgroundColor(getColor());
-        }
+        getSheetContent().setHighlightColor(getColor());
+        getSheetContent().setHighlightMarks(from, to);
     }
 
     @Override
-    public void cleanHighlight(Mark from, Mark to) {
-        List<TextCharacter> characters = getSheetContent().getCharactersBetween(from, to);
-        for (TextCharacter character : characters) {
-            character.setBackgroundColor(EditorVariables.getBackgroundColor());
-        }
+    public void cleanHighlight() {
+        getSheetContent().cleanHighlight();
     }
 
     @Override

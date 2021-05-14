@@ -2,6 +2,7 @@ package nothing.fighur.eddie.sheet;
 
 import com.google.inject.Inject;
 import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalResizeListener;
 import nothing.fighur.eddie.penpouch.Mark;
@@ -183,6 +184,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     public void deleteCharactersBetween(Mark from, Mark to) {
         try {
             getContentText().deleteCharactersBetween(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
             // TODO
         }
@@ -191,6 +193,31 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     @Override
     public CharSequence asCharSequence() {
         return getContentText().asCharSequence();
+    }
+
+    @Override
+    public void setHighlightColor(TextColor color) {
+        getContentText().setHighlightColor(color);
+    }
+
+    @Override
+    public void setHighlightMarks(Mark from, Mark to) {
+        try {
+            getContentText().setHighlightMarks(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    @Override
+    public void cleanHighlight() {
+        try {
+            getContentText().cleanHighlight(getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
+            setTerminalCursorPosition(getLastPosition());
+        } catch (IOException e) {
+            // TODO
+        }
     }
 
     @Override

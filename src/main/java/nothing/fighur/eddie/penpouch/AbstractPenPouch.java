@@ -81,6 +81,16 @@ public abstract class AbstractPenPouch implements PenPouch {
         this.closingMark = new Mark(row, col);
     }
 
+    protected void highlight() {
+        getHighlighter().highlight(getStartingMark(), getClosingMark());
+    }
+
+    protected void cleanHighlight() {
+        this.startingMark = Mark.unsetMark();
+        this.closingMark = Mark.unsetMark();
+        getHighlighter().cleanHighlight();
+    }
+
     protected void paste() {
         getGlue().paste(getHand().getPosition());
     }

@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.text;
 
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.penpouch.Mark;
@@ -7,6 +8,7 @@ import nothing.fighur.eddie.sheet.SheetContent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +16,9 @@ public class DefaultContentText implements ContentText {
 
     private List<List<TextCharacter>> text = new ArrayList<>();
     private SheetContent sheetContent;
+    private TextColor highlightColor = TextColor.ANSI.YELLOW;
+    private Mark fromHighlightMark = Mark.unsetMark();
+    private Mark toHighlightMark = Mark.unsetMark();
     private int rowOffset = 0;
     private int colOffset = 0;
 
@@ -151,13 +156,59 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
-    public void deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) {
-
+    public void deleteCharactersBetween(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
+        Mark head;
+        Mark tail;
+        if (from.compareTo(to) > 0) {
+            head = from;
+            tail = to;
+        } else {
+            head = to;
+            tail = from;
+        }
+        int tailingRow = tail.getRow();
+        int tailingCol = tail.getColumn();
+        int headingRow = head.getRow();
+        int headingCol = head.getColumn();
+        if (tailingRow != headingRow) {
+            while (tailingRow < headingRow) {
+                List<TextCharacter> rowCharacters = text.get(tailingRow);
+                removeFromRow(rowCharacters, tailingCol, rowCharacters.size());
+                tailingCol = 0;
+                tailingRow++;
+            }
+        }
+        removeFromRow(text.get(tailingRow), tailingCol, headingCol);
+        drawContent(null, terminal, firstRow, lastRow, firstCol, lastCol);
     }
 
     @Override
     public List<TextCharacter> getCharactersBetween(Mark from, Mark to) {
-        return null;
+        List<TextCharacter> characters = new LinkedList<>();
+        Mark head;
+        Mark tail;
+        if (from.compareTo(to) > 0) {
+            head = from;
+            tail = to;
+        } else {
+            head = to;
+            tail = from;
+        }
+        int tailingRow = tail.getRow();
+        int tailingCol = tail.getColumn();
+        int headingRow = head.getRow();
+        int headingCol = head.getColumn();
+        if (tailingRow != headingRow) {
+            while (tailingRow < headingRow) {
+                List<TextCharacter> rowCharacters = text.get(tailingRow);
+                characters.addAll(rowCharacters.subList(tailingCol, rowCharacters.size()));
+                characters.add(TextCharacter.withDefaultCharacteristics('\n'));
+                tailingCol = 0;
+                tailingRow++;
+            }
+        }
+        characters.addAll(text.get(tailingRow).subList(tailingCol, headingCol));
+        return characters;
     }
 
     @Override
@@ -183,6 +234,28 @@ public class DefaultContentText implements ContentText {
     }
 
     @Override
+    public void setHighlightColor(TextColor color) {
+        this.highlightColor = color;
+    }
+
+    @Override
+    public void setHighlightMarks(Mark from, Mark to, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
+        if (Mark.isUnset(from) || Mark.isUnset(to)) {
+            setFromHighlightMark(Mark.unsetMark());
+            setToHighlightMark(Mark.unsetMark());
+        } else {
+            setFromHighlightMark(from);
+            setToHighlightMark(to);
+        }
+        drawContent(null, terminal, firstRow, lastRow, firstCol, lastCol);
+    }
+
+    @Override
+    public void cleanHighlight(Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol)  throws IOException{
+        setHighlightMarks(Mark.unsetMark(), Mark.unsetMark(), terminal, firstRow, lastRow, firstCol, lastCol);
+    }
+
+    @Override
     public int getColOffset() {
         return colOffset;
     }
@@ -203,8 +276,11 @@ public class DefaultContentText implements ContentText {
                 List<TextCharacter> visibleRowCharacters = getColOffset() <= rowCharacters.size() ? rowCharacters.subList(getColOffset(), rowCharacters.size()) : new ArrayList<>();
                 for (int col = firstCol, textCol = 0; textCol < visibleRowCharacters.size() && col < lastCol; col++, textCol++) {
                     TextCharacter character = visibleRowCharacters.get(textCol);
-                    terminal.setBackgroundColor(character.getBackgroundColor());
                     terminal.setForegroundColor(character.getForegroundColor());
+                    if (inHighlightZone(textRow, textCol))
+                        terminal.setBackgroundColor(getHighlightColor());
+                    else
+                        terminal.setBackgroundColor(character.getBackgroundColor());
                     terminal.putCharacter(character.getCharacter());
                 }
                 for (int col = visibleRowCharacters.size(); col < lastCol; col++) {
@@ -240,6 +316,32 @@ public class DefaultContentText implements ContentText {
         return row < text.size() ? text.get(row) : new ArrayList<>();
     }
 
+    private boolean inHighlightZone(int row, int col) {
+        Mark from = getFromHighlightMark();
+        Mark to = getToHighlightMark();
+        if (Mark.isUnset(from) || Mark.isUnset(to))
+            return false;
+        Mark head;
+        Mark tail;
+        if (from.compareTo(to) > 0) {
+            head = from;
+            tail = to;
+        } else {
+            head = to;
+            tail = from;
+        }
+        int tailingRow = tail.getRow();
+        int tailingCol = tail.getColumn();
+        int headingRow = head.getRow();
+        int headingCol = head.getColumn();
+        if (!(row >= tailingRow && row <= headingRow))
+            return false;
+        else if ((row == tailingRow && col < tailingCol) || (row == headingRow && col > headingCol))
+            return false;
+        else
+            return true;
+    }
+
     public SheetContent getSheetContent() {
         return sheetContent;
     }
@@ -254,5 +356,25 @@ public class DefaultContentText implements ContentText {
 
     public void setColOffset(int colOffset) {
         this.colOffset = colOffset;
+    }
+
+    public TextColor getHighlightColor() {
+        return highlightColor;
+    }
+
+    public Mark getFromHighlightMark() {
+        return fromHighlightMark;
+    }
+
+    public void setFromHighlightMark(Mark fromHighlightMark) {
+        this.fromHighlightMark = fromHighlightMark;
+    }
+
+    public Mark getToHighlightMark() {
+        return toHighlightMark;
+    }
+
+    public void setToHighlightMark(Mark toHighlightMark) {
+        this.toHighlightMark = toHighlightMark;
     }
 }

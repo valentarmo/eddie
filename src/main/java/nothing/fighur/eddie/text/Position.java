@@ -1,8 +1,8 @@
 package nothing.fighur.eddie.text;
 
 public class Position {
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
     public Position(int row, int col) {
         this.row = row;

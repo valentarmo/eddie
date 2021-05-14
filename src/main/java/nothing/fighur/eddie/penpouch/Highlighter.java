@@ -11,11 +11,9 @@ public interface Highlighter extends Tool {
     void highlight(Mark from, Mark to);
 
     /**
-     * Remove the highlighting between the marks
-     * @param from starting mark
-     * @param to closing mark
+     * Remove highlighting
      */
-    void cleanHighlight(Mark from, Mark to);
+    void cleanHighlight();
 
     /**
      * Get the highlighter's color

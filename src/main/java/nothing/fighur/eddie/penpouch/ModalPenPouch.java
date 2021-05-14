@@ -84,6 +84,7 @@ public class ModalPenPouch extends AbstractPenPouch {
             case 'v':
                 setCurrentMode(Mode.Visual);
                 setStartingMark();
+                setClosingMark();
                 break;
             case ':':
                 // TODO commands
@@ -136,25 +137,25 @@ public class ModalPenPouch extends AbstractPenPouch {
             case ArrowUp:
                 moveUp();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case ArrowDown:
                 moveDown();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case ArrowRight:
                 moveRight();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case ArrowLeft:
                 moveLeft();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case Escape:
-                getHighlighter().cleanHighlight(getStartingMark(), getClosingMark());
+                cleanHighlight();
                 setCurrentMode(Mode.Normal);
                 break;
             case Character:
@@ -170,39 +171,40 @@ public class ModalPenPouch extends AbstractPenPouch {
             case 'k':
                 moveUp();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'j':
                 moveDown();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'l':
                 moveRight();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'h':
                 moveLeft();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'w':
                 moveToStartOfNextWord();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'e':
                 moveToEndOfNextWord();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'b':
                 moveToStartOfPreviousWord();
                 setClosingMark();
-                getHighlighter().highlight(getStartingMark(), getClosingMark());
+                highlight();
                 break;
             case 'd':
+                cleanHighlight();
                 cut();
                 break;
             default:

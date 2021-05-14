@@ -1,5 +1,6 @@
 package nothing.fighur.eddie.sheet;
 
+import com.googlecode.lanterna.TextColor;
 import nothing.fighur.eddie.penpouch.Mark;
 import nothing.fighur.eddie.text.Position;
 import nothing.fighur.eddie.text.TextCharacter;
@@ -51,4 +52,22 @@ public interface SheetContent extends Sheet {
      * @return CharSequence
      */
     CharSequence asCharSequence();
+
+    /**
+     * Set the text's background color for highlighting
+     * @param color the color
+     */
+    void setHighlightColor(TextColor color);
+
+    /**
+     * Mark where the text is highlighted. To remove them pass the unset Mark.
+     * @param from initial Mark
+     * @param to finishing Mark
+     */
+    void setHighlightMarks(Mark from, Mark to);
+
+    /**
+     * Clean highlight
+     */
+    void cleanHighlight();
 }
