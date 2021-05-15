@@ -22,8 +22,9 @@ public class FilePersistenceProvider implements  PersistenceProvider {
             String content = reader.readLine();
             while (content != null) {
                 text.append(content);
-                text.append('\n');
                 content = reader.readLine();
+                if (content != null)
+                    text.append('\n');
             }
             reader.close();
             return text;

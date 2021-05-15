@@ -7,25 +7,10 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class EditorModule extends AbstractModule {
 
     private static final Terminal terminal = getTerminal();
-
-    static {
-        Runtime.getRuntime().addShutdownHook(new EddieShutdown());
-    }
-
-    static class EddieShutdown extends Thread {
-        public void run() {
-            try {
-                if (Objects.nonNull(terminal)) {
-                    terminal.exitPrivateMode();
-                }
-            } catch (IOException e) { }
-        }
-    }
 
     private static Terminal getTerminal() {
         try {

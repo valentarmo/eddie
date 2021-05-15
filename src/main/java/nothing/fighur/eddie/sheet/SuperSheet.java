@@ -395,7 +395,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         setContentFirstRow(1);
         setContentLastRow(sheetRows - 2);
         setFooterFirstRow(sheetRows - 1);
-        setFooterLastRow(sheetRows);
+        setFooterLastRow(sheetRows - 1);
     }
 
     public int getSheetCols() {

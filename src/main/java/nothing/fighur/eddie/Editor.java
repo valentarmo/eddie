@@ -9,17 +9,25 @@ public interface Editor {
     /**
      * Edit the contents of the artifact identified by key
      * @param key the artifact's identifier
+     * @return true if the creation was successful, false otherwise
      */
-    void edit(String key);
+    boolean edit(String key);
 
     /**
      * Save the editor's content
+     * @return true if the save was successful, false otherwise
      */
-    void saveSheet();
+    boolean saveSheet();
 
     /**
-     * Save the editor's content to the specified at key
-     * @param key
+     * Save the editor's content to the artifact identified by key
+     * @param key  the artifact's identifier
+     * @return true if the save was successful, false otherwise
      */
-    void saveSheetAs(String key);
+    boolean saveSheetAs(String key);
+
+    /**
+     * Close the editor
+     */
+    void close();
 }

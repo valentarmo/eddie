@@ -73,6 +73,9 @@ public class ModalPenPouch extends AbstractPenPouch {
             case 'b':
                 moveToStartOfPreviousWord();
                 break;
+            case 'o':
+                insertNewLine();
+                setCurrentMode(Mode.Insert);
             case 'p':
                 paste();
                 break;
@@ -88,7 +91,8 @@ public class ModalPenPouch extends AbstractPenPouch {
                 setClosingMark();
                 break;
             case ':':
-                // TODO commands
+                String command = getPencil().promptForInput(":");
+                if (!command.isEmpty()) interpretCommand(command);
                 break;
             default:
                 break;
@@ -116,7 +120,7 @@ public class ModalPenPouch extends AbstractPenPouch {
                 deleteCharacter();
                 break;
             case Tab:
-                int col = getHand().getPosition().getCol();
+                int col;
                 do {
                     col = getHand().getPosition().getCol();
                     insertCharacter(' ');
@@ -210,6 +214,43 @@ public class ModalPenPouch extends AbstractPenPouch {
                 setCurrentMode(Mode.Normal);
                 break;
             default:
+                break;
+        }
+    }
+
+    private void interpretCommand(String command) {
+        String key;
+        switch (command) {
+            case "save":
+                if (!saveSheet())
+                    getPencil().writeError("Couldn't Save Contents");
+                break;
+            case "saveas":
+                key = getPencil().promptForInput("Save As: ");
+                if (!key.isEmpty())
+                    if (!saveSheetAs(key))
+                        getPencil().writeError("Couldn't Save To: '" + key + "'");
+                    else
+                        getPencil().writeTitle(key);
+                break;
+            case "close":
+            case "exit":
+            case "quit":
+                close();
+                break;
+            case "open":
+                key = getPencil().promptForInput("Open: ");
+                if (!key.isEmpty())
+                    if (!changeSheet(key))
+                        getPencil().writeError("Couldn't Open: '" + key + "'");
+                    else {
+                        getPencil().writeTitle(key);
+                        getHand().reset();
+                        moveUp();
+                    }
+                break;
+            default:
+                getPencil().writeError("Command '" + command + "' not recognized");
                 break;
         }
     }

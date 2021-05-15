@@ -27,6 +27,7 @@ public class DefaultContentText implements ContentText {
     @Override
     public void writeText(List<TextCharacter> text, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
         this.text = new ArrayList<>();
+        this.text.add(new ArrayList<>());
         insertText(new Position(0, 0), text, terminal, firstRow, lastRow, firstCol, lastCol);
     }
 
@@ -170,17 +171,118 @@ public class DefaultContentText implements ContentText {
 
     @Override
     public Position moveToStartOfNextWord(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
-        return null;
+        // TODO
+        int row = position.getRow();
+        int col = position.getCol();
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col + 1 < rowCharacters.size())
+            return moveToStartOfNextWord(row, col + 1);
+        else if (col + 1 == rowCharacters.size())
+            return moveToStartOfNextWord(row + 1, 0);
+        else
+            return moveToStartOfNextWord(row, col);
+    }
+
+    private Position moveToStartOfNextWord(int row, int col) {
+        if (row >= text.size())
+            return new Position(text.size() - 1, text.get(text.size() - 1).size());
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col < rowCharacters.size()) {
+            if (col == 0) {
+                if (Character.isWhitespace(rowCharacters.get(col).getCharacter())) {
+                    return moveToStartOfNextWord(row, col + 1);
+                } else {
+                    return new Position(row, col);
+                }
+            } else if (col > 0) {
+                if (Character.isWhitespace(rowCharacters.get(col - 1).getCharacter())) {
+                    if (!Character.isWhitespace(rowCharacters.get(col).getCharacter()))
+                        return new Position(row, col);
+                    else
+                        return moveToStartOfNextWord(row, col + 1);
+                } else {
+                    return moveToStartOfNextWord(row, col + 1);
+                }
+            } else {
+                return moveToStartOfNextWord(row, 0);
+            }
+        } else {
+            return moveToStartOfNextWord(row + 1, 0);
+        }
     }
 
     @Override
     public Position moveToEndOfNextWord(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
-        return null;
+        int row = position.getRow();
+        int col = position.getCol();
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col + 1 < rowCharacters.size())
+            if (Character.isWhitespace(rowCharacters.get(col + 1).getCharacter()))
+                return moveToEndOfNextWord(row, col + 1);
+            else
+                return moveToEndOfNextWord(row, col);
+        else if (col + 1 == rowCharacters.size())
+            return moveToEndOfNextWord(row + 1, 0);
+        else
+            return moveToEndOfNextWord(row, col);
+    }
+
+    private Position moveToEndOfNextWord(int row, int col) {
+        if (row >= text.size())
+            return new Position(text.size() - 1, text.get(text.size() - 1).size());
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col < rowCharacters.size()) {
+            if (!Character.isWhitespace(rowCharacters.get(col).getCharacter())) {
+                while (col < rowCharacters.size() && !Character.isWhitespace(rowCharacters.get(col).getCharacter()))
+                    col++;
+                return new Position(row, --col);
+            } else {
+                return moveToEndOfNextWord(row, col + 1);
+            }
+        } else {
+            return moveToEndOfNextWord(row + 1, 0);
+        }
     }
 
     @Override
     public Position moveToStartOfPreviousWord(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
-        return null;
+        int row = position.getRow();
+        int col = position.getCol();
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col > 0) {
+            return moveToStartOfPreviousWord(row, col - 1);
+        } else if (col == 0) {
+            if (row - 1 >= 0) {
+                return moveToStartOfPreviousWord(row - 1, text.get(row - 1).size() - 1);
+            } else {
+                return position;
+            }
+        } else {
+            return moveToStartOfPreviousWord(new Position(row, 0), terminal, firstRow, lastRow, firstCol, lastCol);
+        }
+    }
+
+    private Position moveToStartOfPreviousWord(int row, int col) {
+        if (row < 0)
+            return  new Position(0, 0);
+        List<TextCharacter> rowCharacters = text.get(row);
+        if (col < 0 || rowCharacters.isEmpty()) {
+            return moveToStartOfPreviousWord(row - 1, text.get(row - 1).size() - 1);
+        } else {
+            if (!Character.isWhitespace(rowCharacters.get(col).getCharacter())) {
+                while (col > 0 && !Character.isWhitespace(rowCharacters.get(col).getCharacter()))
+                    col--;
+                if (col > 0 && !Character.isWhitespace(rowCharacters.get(col + 1).getCharacter())) {
+                    return new Position(row, col + 1);
+                } else if (col == 0 && !Character.isWhitespace(rowCharacters.get(col).getCharacter())) {
+                    return new Position(row, col);
+                } else {
+                    return moveToStartOfPreviousWord(row, col - 1);
+                }
+            } else {
+                return moveToStartOfPreviousWord(row, col - 1);
+            }
+        }
     }
 
     @Override
@@ -250,7 +352,7 @@ public class DefaultContentText implements ContentText {
         StringBuilder str = new StringBuilder();
         for (List<TextCharacter> row : text) {
             for (TextCharacter c : row) {
-                str.append(c);
+                str.append(c.getCharacter());
             }
             str.append('\n');
         }

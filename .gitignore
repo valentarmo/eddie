@@ -1,5 +1,6 @@
 /.*
 target/
 eddie.iml
+secret/
 !/.gitignore
 !/.git

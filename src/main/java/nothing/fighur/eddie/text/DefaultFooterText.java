@@ -55,6 +55,7 @@ public class DefaultFooterText implements FooterText {
     @Override
     public String promptForInput(Terminal terminal, String promptMessage) throws IOException {
         String input = "";
+        draw(terminal, promptMessage + input, getPromptBackgroundColor(), getPromptForegroundColor());
 
         KeyStroke keyStroke;
         KeyType keyType;
@@ -67,22 +68,29 @@ public class DefaultFooterText implements FooterText {
                 if (input.length() > 0)
                     input = input.substring(0, input.length() - 1);
             }
+            draw(terminal, promptMessage + input, getPromptBackgroundColor(), getPromptForegroundColor());
         } while (keyType != KeyType.Escape && keyType != KeyType.Enter);
 
         if (keyType == KeyType.Escape) input = "";
 
-        draw(terminal, promptMessage + " " + input, getPromptBackgroundColor(), getPromptForegroundColor());
+        draw(terminal, "", getDefaultFooterBackgroundColor(), getDefaultFooterForegroundColor());
         return input;
     }
 
     private void draw(Terminal terminal, String message, TextColor backgroundColor, TextColor foregroundColor) throws IOException {
-        terminal.setBackgroundColor(backgroundColor);
         terminal.setForegroundColor(foregroundColor);
+        terminal.setBackgroundColor(backgroundColor);
         int textIndex = 0;
+        int messageLastRow = getFirstRow();
+        int messageLastCol = getFirstCol();
         for (int i = getFirstRow(); i <= getLastRow(); i++) {
             terminal.setCursorPosition(getFirstCol(), i);
             for (int j = getFirstCol(); j < getLastCol(); j++) {
-                char c = textIndex < message.length() ? message.charAt(textIndex++) : ' ';
+                char c = textIndex < message.length() ? message.charAt(textIndex) : ' ';
+                if (textIndex++ == message.length()) {
+                    messageLastRow = i;
+                    messageLastCol = j;
+                }
                 if (c == '\n') {
                     continue;
                 } else {
@@ -90,6 +98,7 @@ public class DefaultFooterText implements FooterText {
                 }
             }
         }
+        terminal.setCursorPosition(messageLastCol, messageLastRow);
         terminal.flush();
     }
 

@@ -102,16 +102,20 @@ public abstract class AbstractPenPouch implements PenPouch {
         getScissors().cut(getStartingMark(), getClosingMark());
     }
 
-    protected void saveSheet() {
-        getEditor().saveSheet();
+    protected boolean saveSheet() {
+        return getEditor().saveSheet();
     }
 
-    protected void saveSheetAs(String key) {
-        getEditor().saveSheetAs(key);
+    protected boolean saveSheetAs(String key) {
+        return getEditor().saveSheetAs(key);
     }
 
-    protected void changeSheet(String key) {
-        getEditor().edit(key);
+    protected boolean changeSheet(String key) {
+        return getEditor().edit(key);
+    }
+
+    protected void close() {
+        getEditor().close();
     }
 
     public Pencil getPencil() {
