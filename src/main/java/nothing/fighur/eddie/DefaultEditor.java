@@ -3,18 +3,19 @@ package nothing.fighur.eddie;
 import com.google.inject.Inject;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.Terminal;
+import nothing.fighur.eddie.exceptions.ArtifactExistsException;
 import nothing.fighur.eddie.folder.Folder;
 import nothing.fighur.eddie.penpouch.PenPouch;
 
 import java.io.IOException;
 
-public class Eddie implements Editor {
+public class DefaultEditor implements Editor {
     private PenPouch penPouch;
     private Folder folder;
     private Terminal terminal;
 
     @Inject
-    public Eddie(Terminal terminal, PenPouch penPouch, Folder folder) {
+    public DefaultEditor(Terminal terminal, PenPouch penPouch, Folder folder) {
         setPenPouch(penPouch);
         setFolder(folder);
         setTerminal(terminal);
@@ -32,9 +33,21 @@ public class Eddie implements Editor {
     }
 
     @Override
-    public boolean edit(String key) {
+    public void edit(String key) {
+        getFolder().takeOutSheet(key);
+        try {
+            while (true) {
+                KeyStroke keyStroke = getTerminal().readInput();
+                getPenPouch().doAction(keyStroke.getKeyType(), keyStroke);
+            }
+        } catch (IOException e) { }
+    }
+
+    @Override
+    public boolean takeOutSheet(String key) {
         return getFolder().takeOutSheet(key);
     }
+
 
     @Override
     public boolean saveSheet() {
@@ -42,8 +55,13 @@ public class Eddie implements Editor {
     }
 
     @Override
-    public boolean saveSheetAs(String key) {
+    public boolean saveSheetAs(String key) throws ArtifactExistsException {
         return getFolder().saveSheetAs(key);
+    }
+
+    @Override
+    public boolean forceSaveSheetAs(String key) {
+        return getFolder().forceSaveSheetAs(key);
     }
 
     @Override

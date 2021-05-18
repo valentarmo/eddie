@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public class DefaultHeaderText implements HeaderText {
 
-    private TextColor defaultFooterBackgroundColor = TextColor.ANSI.WHITE;
-    private TextColor defaultFooterForegroundColor = TextColor.ANSI.BLACK;
+    private TextColor defaultBackgroundColor = TextColor.ANSI.WHITE;
+    private TextColor defaultForegroundColor = TextColor.ANSI.BLACK;
 
     private String title = "BLANK";
     private String subtitle = "text";
@@ -70,8 +70,8 @@ public class DefaultHeaderText implements HeaderText {
     }
 
     private void drawText(Terminal terminal, int firstCol, int lastCol, String text) throws IOException {
-        terminal.setBackgroundColor(getDefaultFooterBackgroundColor());
-        terminal.setForegroundColor(getDefaultFooterForegroundColor());
+        terminal.setBackgroundColor(getDefaultBackgroundColor());
+        terminal.setForegroundColor(getDefaultForegroundColor());
         int textIndex = 0;
         for (int i = getFirstRow(); i <= getLastRow(); i++) {
             terminal.setCursorPosition(firstCol, i);
@@ -89,20 +89,20 @@ public class DefaultHeaderText implements HeaderText {
         terminal.flush();
     }
 
-    public TextColor getDefaultFooterBackgroundColor() {
-        return defaultFooterBackgroundColor;
+    public TextColor getDefaultBackgroundColor() {
+        return defaultBackgroundColor;
     }
 
-    public void setDefaultFooterBackgroundColor(TextColor defaultFooterBackgroundColor) {
-        this.defaultFooterBackgroundColor = defaultFooterBackgroundColor;
+    public void setDefaultBackgroundColor(TextColor defaultBackgroundColor) {
+        this.defaultBackgroundColor = defaultBackgroundColor;
     }
 
-    public TextColor getDefaultFooterForegroundColor() {
-        return defaultFooterForegroundColor;
+    public TextColor getDefaultForegroundColor() {
+        return defaultForegroundColor;
     }
 
-    public void setDefaultFooterForegroundColor(TextColor defaultFooterForegroundColor) {
-        this.defaultFooterForegroundColor = defaultFooterForegroundColor;
+    public void setDefaultForegroundColor(TextColor defaultForegroundColor) {
+        this.defaultForegroundColor = defaultForegroundColor;
     }
 
     public String getTitle() {

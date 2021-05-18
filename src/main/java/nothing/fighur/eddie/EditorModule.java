@@ -30,6 +30,6 @@ public class EditorModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(Editor.class).to(Eddie.class).in(Singleton.class);
+        bind(Editor.class).to(DefaultEditor.class).in(Singleton.class);
     }
 }

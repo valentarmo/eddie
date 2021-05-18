@@ -13,6 +13,10 @@ public class App
     {
         Injector injector = Guice.createInjector(new EditorModule(), new TextModule(), new SheetModule(), new PenPouchModule(), new FolderModule());
         Editor editor = injector.getInstance(Editor.class);
-        editor.edit();
+        if (args.length >= 1) {
+            editor.edit(args[0]);
+        } else {
+            editor.edit();
+        }
     }
 }

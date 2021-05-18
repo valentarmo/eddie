@@ -1,10 +1,21 @@
 package nothing.fighur.eddie.folder;
 
+import nothing.fighur.eddie.exceptions.ArtifactExistsException;
+
 import java.io.*;
 
 public class FilePersistenceProvider implements  PersistenceProvider {
     @Override
-    public void persist(CharSequence text, String key) throws IOException {
+    public void persist(CharSequence text, String key) throws IOException, ArtifactExistsException {
+        File file = new File(key);
+        if (file.exists())
+            throw new ArtifactExistsException();
+        else
+            persistOverride(text, key);
+    }
+
+    @Override
+    public void persistOverride(CharSequence text, String key) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(key));
         writer.write(text.toString());
         writer.close();

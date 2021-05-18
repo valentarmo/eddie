@@ -69,7 +69,7 @@ public class SuperPen implements Pencil, Highlighter, Glue, Scissors {
     }
 
     @Override
-    public void writeMessage(String message) {
+    public void writeNote(String message) {
         getSheetFooter().putMessage(message);
     }
 

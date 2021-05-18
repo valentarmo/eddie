@@ -1,16 +1,14 @@
 # Eddie
-Eddie is a very simple terminal based text oldEditor written in java that behaves a
-bit like vi.
+A simple terminal text editor.
+
+## Build
+`mvn package` will create a fat jar at `target/eddie.jar`.
 
 ## Usage
-Eddie is built using maven, so if you want to try it, first clone the repository i.e. 
-`git clone https://github.com/valentarmo/eddie`. Then, go to the project's root directory and type
-`mvn package`. You'll find the JAR `eddie.jar` under the `target` directory. I would not recommend to run it inside a terminal (Double click the jar so it opens in a swing terminal).
-
 Eddie has three modes, normal, insert and visual.
 * ### Normal Mode
     Normal is the default mode. From this mode the user can move around the file,
-    go into either insert or visual mode, or execute commands.
+    go into insert, visual mode, or execute commands.
 
     #### Current Normal Mode Keys
         l - Move right
@@ -18,25 +16,15 @@ Eddie has three modes, normal, insert and visual.
         k - Move up
         j - Move down
         i - Enter insert mode
-        I - Move to the start of the line and enter insert mode
-        a - Move right and enter insert mode
-        A - Move to the end of the line and enter insert mode
-        o - Insert a new line and enter insert mode
-        O - Insert a new line above and enter insert mode
         w - Move to the start of the next word
         e - Move to the end of the current or next word
         b - Move to the start of the current or previous word
         x - delete
-        X - Backspace
-        0 - Go to the start of the line
-        $ - Go to the end of the line
         v - Go into visual mode
-        p - Paste 
-        : - Type a command. Valid commands are, save, open, and quit, which do as they suggest. Press ESC to cancel. Press Enter to confirm the command and continue with the operation.
+        : - Type a command. Valid commands are, save, saveas, open, and quit, which do as they suggest. Press ESC to cancel. Press Enter to submit.
     #### Current Visual Mode Keys
-        l, h, k, j, 0, $ - Same as in normal mode
-        d - cut region and exit to normal mode
-        y - copy region and exit to normal mode
+        l, h, k, j, w, e, b - Same as in normal mode
+        x - cut region and exit to normal mode
     #### Insert Mode
         Every character will be inserted into the text
     #### Keys common to every mode
@@ -45,5 +33,6 @@ Eddie has three modes, normal, insert and visual.
         Left arrow - Move left
         Up arrow - Move up
         Down arrow - Move down
-        Home - Go to start of the line
-        End - Go to the end of the line
+
+## Class Diagram
+A class diagram can be found at `img/class-diagram.png`

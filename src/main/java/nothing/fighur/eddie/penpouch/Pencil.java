@@ -54,10 +54,10 @@ public interface Pencil extends Tool {
     void writeError(String error);
 
     /**
-     * Write a message
-     * @param message the message
+     * Write a note
+     * @param note the note
      */
-    void writeMessage(String message);
+    void writeNote(String note);
 
     /**
      * Prompt for input

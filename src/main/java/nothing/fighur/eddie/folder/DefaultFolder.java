@@ -1,6 +1,7 @@
 package nothing.fighur.eddie.folder;
 
 import com.google.inject.Inject;
+import nothing.fighur.eddie.exceptions.ArtifactExistsException;
 import nothing.fighur.eddie.sheet.Sheet;
 import nothing.fighur.eddie.text.TextCharacter;
 
@@ -46,6 +47,19 @@ public class DefaultFolder implements Folder {
         try {
             if (getCurrentSheetKey().isEmpty())
                 return false;
+            getPersistenceProvider().persistOverride(getSheet().asCharSequence(), getCurrentSheetKey());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean saveSheetAs(String key) throws ArtifactExistsException {
+        try {
+            if (key.isEmpty())
+                return false;
+            setCurrentSheetKey(key);
             getPersistenceProvider().persist(getSheet().asCharSequence(), getCurrentSheetKey());
             return true;
         } catch (IOException e) {
@@ -54,12 +68,12 @@ public class DefaultFolder implements Folder {
     }
 
     @Override
-    public boolean saveSheetAs(String key) {
+    public boolean forceSaveSheetAs(String key) {
         try {
             if (key.isEmpty())
                 return false;
             setCurrentSheetKey(key);
-            getPersistenceProvider().persist(getSheet().asCharSequence(), getCurrentSheetKey());
+            getPersistenceProvider().persistOverride(getSheet().asCharSequence(), getCurrentSheetKey());
             return true;
         } catch (IOException e) {
             return false;

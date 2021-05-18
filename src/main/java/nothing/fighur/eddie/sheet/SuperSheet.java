@@ -5,7 +5,6 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalResizeListener;
-import nothing.fighur.eddie.EditorVariables;
 import nothing.fighur.eddie.penpouch.Mark;
 import nothing.fighur.eddie.text.*;
 
@@ -33,6 +32,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     private int footerLastRow;
     private int footerFirstCol;
     private int footerLastCol;
+    private long lastFooterMessageTime;
 
     private SuperSheet() { }
 
@@ -54,7 +54,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setLastPosition(position);
             setTerminalCursorPosition(position);
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't insert text");
+            reset();
         }
     }
 
@@ -66,8 +67,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -79,8 +80,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -92,8 +93,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -105,8 +106,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -118,8 +119,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -131,8 +132,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -144,8 +145,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -157,8 +158,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -170,8 +171,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -183,8 +184,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(newPosition);
             return newPosition;
         } catch (IOException e) {
-            // TODO
-            return position;
+            reset();
+            return getLastPosition();
         }
     }
 
@@ -201,7 +202,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             setTerminalCursorPosition(getLastPosition());
             return newPosition;
         } catch (IOException e) {
-            // TODO
+            reset();
             return getLastPosition();
         }
     }
@@ -212,7 +213,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getContentText().writeText(text, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            reset();
+            putError("Couldn't write text");
         }
     }
 
@@ -232,7 +234,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getContentText().setHighlightMarks(from, to, getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            reset();
+            putError("Couldn't set the highlight region");
         }
     }
 
@@ -242,7 +245,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getContentText().cleanHighlight(getTerminal(), getContentFirstRow(), getContentLastRow(), getContentFirstCol(), getContentLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            reset();
+            putError("Couldn't clean the highlight region");
         }
     }
 
@@ -255,6 +259,12 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
         }
     }
 
+    private void reset() {
+        setLastPosition(new Position(0, 0));
+        setTerminalCursorPosition(getLastPosition());
+        refresh();
+    }
+
     private void refresh() {
         try {
             getHeaderText().resize(getTerminal(), getHeaderFirstRow(), getHeaderLastRow(), getHeaderFirstCol(), getHeaderLastCol());
@@ -262,7 +272,7 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getFooterText().resize(getTerminal(), getFooterFirstRow(), getFooterLastRow(), getFooterFirstCol(), getFooterLastCol());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            System.exit(1);
         }
     }
 
@@ -272,7 +282,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getHeaderText().updateTitle(getTerminal(), title);
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't update title");
+            reset();
         }
     }
 
@@ -282,7 +293,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getHeaderText().updateSubtitle(getTerminal(), subtitle);
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't update subtitle");
+            reset();
         }
     }
 
@@ -292,7 +304,8 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
             getHeaderText().updateLogo(getTerminal(), logo);
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't update logo");
+            reset();
         }
     }
 
@@ -300,9 +313,10 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     public void putWarning(String warning) {
         try {
             getFooterText().putWarning(getTerminal(), warning);
+            setLastFooterMessageTime(System.currentTimeMillis());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't display warning");
         }
     }
 
@@ -310,9 +324,10 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     public void putError(String error) {
         try {
             getFooterText().putError(getTerminal(), error);
+            setLastFooterMessageTime(System.currentTimeMillis());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            System.exit(1);
         }
     }
 
@@ -320,9 +335,10 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     public void putMessage(String message) {
         try {
             getFooterText().putMessage(getTerminal(), message);
+            setLastFooterMessageTime(System.currentTimeMillis());
             setTerminalCursorPosition(getLastPosition());
         } catch (IOException e) {
-            // TODO
+            putError("Couldn't display message");
         }
     }
 
@@ -330,10 +346,12 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     public String promptForInput(String promptMessage) {
         try {
             String input = getFooterText().promptForInput(getTerminal(), promptMessage);
+            setLastFooterMessageTime(System.currentTimeMillis());
             setTerminalCursorPosition(getLastPosition());
             return input;
         } catch (IOException e) {
-            // TODO
+            reset();
+            putError("Couldn't prompt");
             return "";
         }
     }
@@ -341,14 +359,15 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
     private void setTerminalCursorPosition(Position position)
     {
         try {
-            getTerminal().setBackgroundColor(EditorVariables.getBackgroundColor());
-            getTerminal().setForegroundColor(EditorVariables.getForegroundColor());
+            if (System.currentTimeMillis() - getLastFooterMessageTime() >= 10000)
+                putMessage("");
             int row = position.getRow() + getContentFirstRow() - getContentText().getRowOffset();
             int col = position.getCol() + getContentFirstCol() - getContentText().getColOffset();
             getTerminal().setCursorPosition(col, row);
             getTerminal().flush();
         } catch (IOException e) {
-            // TODO
+            reset();
+            putError("Couldn't update the cursor position");
         }
     }
 
@@ -514,5 +533,13 @@ public class SuperSheet implements SheetHeader, SheetContent, SheetFooter, Termi
 
     public void setLastPosition(Position lastPosition) {
         this.lastPosition = lastPosition;
+    }
+
+    public long getLastFooterMessageTime() {
+        return lastFooterMessageTime;
+    }
+
+    public void setLastFooterMessageTime(long lastFooterMessageTime) {
+        this.lastFooterMessageTime = lastFooterMessageTime;
     }
 }

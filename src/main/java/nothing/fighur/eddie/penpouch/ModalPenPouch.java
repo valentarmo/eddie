@@ -5,6 +5,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import nothing.fighur.eddie.Editor;
 import nothing.fighur.eddie.EditorVariables;
+import nothing.fighur.eddie.exceptions.ArtifactExistsException;
 
 public class ModalPenPouch extends AbstractPenPouch {
 
@@ -224,14 +225,33 @@ public class ModalPenPouch extends AbstractPenPouch {
             case "save":
                 if (!saveSheet())
                     getPencil().writeError("Couldn't Save Contents");
+                else
+                    getPencil().writeNote("Saved");
                 break;
             case "saveas":
                 key = getPencil().promptForInput("Save As: ");
                 if (!key.isEmpty())
-                    if (!saveSheetAs(key))
-                        getPencil().writeError("Couldn't Save To: '" + key + "'");
-                    else
-                        getPencil().writeTitle(key);
+                    try {
+                        if (!saveSheetAs(key)) {
+                            getPencil().writeError("Couldn't Save To: '" + key + "'");
+                        } else {
+                            getPencil().writeTitle(key);
+                            getPencil().writeNote("Saved");
+                        }
+                    } catch (ArtifactExistsException e) {
+                        String override = getPencil().promptForInput("'" + key + "' Already Exists. Override? (y/n) : ").toLowerCase();
+                        while (!override.equals("y") && !override.equals("n")) {
+                            override = getPencil().promptForInput("Please answer 'y' or 'n'").toLowerCase();
+                        }
+                        if (override.equals("y")) {
+                            if (!forceSaveSheetAs(key)) {
+                                getPencil().writeError("Couldn't Save To: '" + key + "'");
+                            } else {
+                                getPencil().writeTitle(key);
+                                getPencil().writeNote("Saved");
+                            }
+                        }
+                    }
                 break;
             case "close":
             case "exit":

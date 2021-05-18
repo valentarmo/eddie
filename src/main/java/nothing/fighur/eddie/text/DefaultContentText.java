@@ -171,16 +171,18 @@ public class DefaultContentText implements ContentText {
 
     @Override
     public Position moveToStartOfNextWord(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
-        // TODO
         int row = position.getRow();
         int col = position.getCol();
         List<TextCharacter> rowCharacters = text.get(row);
+        Position newPosition;
         if (col + 1 < rowCharacters.size())
-            return moveToStartOfNextWord(row, col + 1);
+            newPosition = moveToStartOfNextWord(row, col + 1);
         else if (col + 1 == rowCharacters.size())
-            return moveToStartOfNextWord(row + 1, 0);
+            newPosition = moveToStartOfNextWord(row + 1, 0);
         else
-            return moveToStartOfNextWord(row, col);
+            newPosition = moveToStartOfNextWord(row, col);
+        drawContent(newPosition, terminal, firstRow, lastRow, firstCol, lastCol);
+        return newPosition;
     }
 
     private Position moveToStartOfNextWord(int row, int col) {
@@ -216,15 +218,18 @@ public class DefaultContentText implements ContentText {
         int row = position.getRow();
         int col = position.getCol();
         List<TextCharacter> rowCharacters = text.get(row);
+        Position newPosition;
         if (col + 1 < rowCharacters.size())
             if (Character.isWhitespace(rowCharacters.get(col + 1).getCharacter()))
-                return moveToEndOfNextWord(row, col + 1);
+                newPosition = moveToEndOfNextWord(row, col + 1);
             else
-                return moveToEndOfNextWord(row, col);
+                newPosition = moveToEndOfNextWord(row, col);
         else if (col + 1 == rowCharacters.size())
-            return moveToEndOfNextWord(row + 1, 0);
+            newPosition = moveToEndOfNextWord(row + 1, 0);
         else
-            return moveToEndOfNextWord(row, col);
+            newPosition = moveToEndOfNextWord(row, col);
+        drawContent(newPosition, terminal, firstRow, lastRow, firstCol, lastCol);
+        return newPosition;
     }
 
     private Position moveToEndOfNextWord(int row, int col) {
@@ -248,18 +253,20 @@ public class DefaultContentText implements ContentText {
     public Position moveToStartOfPreviousWord(Position position, Terminal terminal, int firstRow, int lastRow, int firstCol, int lastCol) throws IOException {
         int row = position.getRow();
         int col = position.getCol();
-        List<TextCharacter> rowCharacters = text.get(row);
+        Position newPosition;
         if (col > 0) {
-            return moveToStartOfPreviousWord(row, col - 1);
+            newPosition = moveToStartOfPreviousWord(row, col - 1);
         } else if (col == 0) {
             if (row - 1 >= 0) {
-                return moveToStartOfPreviousWord(row - 1, text.get(row - 1).size() - 1);
+                newPosition = moveToStartOfPreviousWord(row - 1, text.get(row - 1).size() - 1);
             } else {
-                return position;
+                newPosition = position;
             }
         } else {
-            return moveToStartOfPreviousWord(new Position(row, 0), terminal, firstRow, lastRow, firstCol, lastCol);
+            newPosition = moveToStartOfPreviousWord(new Position(row, 0), terminal, firstRow, lastRow, firstCol, lastCol);
         }
+        drawContent(newPosition, terminal, firstRow, lastRow, firstCol, lastCol);
+        return newPosition;
     }
 
     private Position moveToStartOfPreviousWord(int row, int col) {

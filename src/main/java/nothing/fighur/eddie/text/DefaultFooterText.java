@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class DefaultFooterText implements FooterText {
 
-    private TextColor defaultFooterBackgroundColor = TextColor.ANSI.WHITE;
-    private TextColor defaultFooterForegroundColor = TextColor.ANSI.BLACK;
+    private TextColor defaultBackgroundColor = TextColor.ANSI.WHITE;
+    private TextColor defaultForegroundColor = TextColor.ANSI.BLACK;
     private TextColor warningBackgroundColor = TextColor.ANSI.YELLOW;
     private TextColor warningForegroundColor = TextColor.ANSI.WHITE;
     private TextColor errorBackgroundColor = TextColor.ANSI.RED;
@@ -31,7 +31,7 @@ public class DefaultFooterText implements FooterText {
         setLastRow(lastRow);
         setFirstCol(firstCol);
         setLastCol(lastCol);
-        draw(terminal, getCurrentText(), getDefaultFooterBackgroundColor(), getDefaultFooterForegroundColor());
+        draw(terminal, getCurrentText(), getDefaultBackgroundColor(), getDefaultForegroundColor());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DefaultFooterText implements FooterText {
     @Override
     public void putMessage(Terminal terminal, String message) throws IOException {
         setCurrentText(message);
-        draw(terminal, message, getDefaultFooterBackgroundColor(), getDefaultFooterForegroundColor());
+        draw(terminal, message, getDefaultBackgroundColor(), getDefaultForegroundColor());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DefaultFooterText implements FooterText {
 
         if (keyType == KeyType.Escape) input = "";
 
-        draw(terminal, "", getDefaultFooterBackgroundColor(), getDefaultFooterForegroundColor());
+        draw(terminal, "", getDefaultBackgroundColor(), getDefaultForegroundColor());
         return input;
     }
 
@@ -102,20 +102,20 @@ public class DefaultFooterText implements FooterText {
         terminal.flush();
     }
 
-    public TextColor getDefaultFooterBackgroundColor() {
-        return defaultFooterBackgroundColor;
+    public TextColor getDefaultBackgroundColor() {
+        return defaultBackgroundColor;
     }
 
-    public void setDefaultFooterBackgroundColor(TextColor defaultFooterBackgroundColor) {
-        this.defaultFooterBackgroundColor = defaultFooterBackgroundColor;
+    public void setDefaultBackgroundColor(TextColor defaultBackgroundColor) {
+        this.defaultBackgroundColor = defaultBackgroundColor;
     }
 
-    public TextColor getDefaultFooterForegroundColor() {
-        return defaultFooterForegroundColor;
+    public TextColor getDefaultForegroundColor() {
+        return defaultForegroundColor;
     }
 
-    public void setDefaultFooterForegroundColor(TextColor defaultFooterForegroundColor) {
-        this.defaultFooterForegroundColor = defaultFooterForegroundColor;
+    public void setDefaultForegroundColor(TextColor defaultForegroundColor) {
+        this.defaultForegroundColor = defaultForegroundColor;
     }
 
     public int getFirstRow() {

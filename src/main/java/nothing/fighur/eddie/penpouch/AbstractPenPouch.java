@@ -2,6 +2,7 @@ package nothing.fighur.eddie.penpouch;
 
 import com.google.inject.Inject;
 import nothing.fighur.eddie.Editor;
+import nothing.fighur.eddie.exceptions.ArtifactExistsException;
 import nothing.fighur.eddie.text.TextCharacter;
 
 public abstract class AbstractPenPouch implements PenPouch {
@@ -106,12 +107,16 @@ public abstract class AbstractPenPouch implements PenPouch {
         return getEditor().saveSheet();
     }
 
-    protected boolean saveSheetAs(String key) {
+    protected boolean saveSheetAs(String key) throws ArtifactExistsException {
         return getEditor().saveSheetAs(key);
     }
 
+    protected boolean forceSaveSheetAs(String key) {
+        return getEditor().forceSaveSheetAs(key);
+    }
+
     protected boolean changeSheet(String key) {
-        return getEditor().edit(key);
+        return getEditor().takeOutSheet(key);
     }
 
     protected void close() {
