@@ -10,7 +10,7 @@ Eddie has three modes, normal, insert and visual.
     Normal is the default mode. From this mode the user can move around the file,
     go into insert, visual mode, or execute commands.
 
-    #### Current Normal Mode Keys
+    #### Normal Mode Keys
         l - Move right
         h - Move left
         k - Move up
@@ -22,7 +22,7 @@ Eddie has three modes, normal, insert and visual.
         x - delete
         v - Go into visual mode
         : - Type a command. Valid commands are, save, saveas, open, and quit, which do as they suggest. Press ESC to cancel. Press Enter to submit.
-    #### Current Visual Mode Keys
+    #### Visual Mode Keys
         l, h, k, j, w, e, b - Same as in normal mode
         x - cut region and exit to normal mode
     #### Insert Mode
