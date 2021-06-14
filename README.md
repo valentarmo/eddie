@@ -33,6 +33,3 @@ Eddie has three modes, normal, insert and visual.
         Left arrow - Move left
         Up arrow - Move up
         Down arrow - Move down
-
-## Class Diagram
-A class diagram can be found at `img/class-diagram.png`
